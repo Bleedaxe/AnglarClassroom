@@ -1,0 +1,20 @@
+<div class="row app-container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Courses</h2>
+      <a *ngIf="isAdmin"
+         class="btn btn-primary"
+         routerLink="new">New Course</a>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <app-spinner *ngIf="isLoading; else coursesComponent" style="position: relative; left: 50%; margin-left: -40px"></app-spinner>
+    <ng-template #coursesComponent>
+      <div class="col-xs-12">
+        <app-course *ngFor="let courseEl of courses"
+                    [course]="courseEl"></app-course>
+      </div>
+    </ng-template>
+  </div>
+</div>

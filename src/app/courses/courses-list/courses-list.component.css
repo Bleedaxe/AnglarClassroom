@@ -1,0 +1,13 @@
+.app-container {
+  border-right: 1px ridge gray;
+  padding-right: 20px;
+}
+
+@media (max-width: 991px) {
+  .app-container {
+    border-right: 0;
+    padding-right: 0;
+    border-bottom: 1px ridge gray;
+    padding-bottom: 20px;
+  }
+}

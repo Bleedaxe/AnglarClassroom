@@ -1,0 +1,24 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" (click)="collapsed = !collapsed">
+        <span class="icon-bar" *ngFor="let iconBar of [1, 2, 3]"></span>
+      </button>
+      <a routerLink="/" class="navbar-brand">Angular Classroom</a>
+    </div>
+    <div class="navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed = true">
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active" *ngIf="isAuthenticated"><a routerLink="/courses">Courses</a></li>
+        <li routerLinkActive="active" *ngIf="isAuthenticated"><a routerLink="/favourites">Favourites</a></li>
+        <li routerLinkActive="active" *ngIf="isAdmin"><a routerLink="/users">Users</a></li>
+        <li routerLinkActive="active" *ngIf="!isAuthenticated"><a routerLink="/login">Login</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated">
+        <li routerLinkActive="active"><a routerLink="/profile">Profile</a></li>
+        <li>
+          <a style="cursor: pointer" (click)="onLogout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

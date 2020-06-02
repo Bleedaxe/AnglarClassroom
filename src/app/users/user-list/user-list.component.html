@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-xs-12 container">
+    <app-spinner *ngIf="isLoading; else content"
+                 style="position: relative; left: 50%; margin-left: -40px"></app-spinner>
+    <ng-template #content>
+      <table class="table table-striped">
+        <tr>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Family Name</th>
+          <th>Roles</th>
+          <th>Actions</th>
+        </tr>
+        <tr *ngFor="let user of users">
+          <td>{{user.email}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.familyName}}</td>
+          <td>{{user.roles?.join(', ')}}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-default" (click)="onBlock(user)"> {{user.isBlocked ? 'Unblock' : 'Block'}}</button>
+              <button class="btn btn-danger" (click)="onDelete(user.id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </ng-template>
+  </div>
+</div>

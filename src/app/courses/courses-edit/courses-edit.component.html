@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-xs-12">
+    <app-spinner *ngIf="isLoading; else form"
+                 style="position: relative; left: 50%; margin-left: -40px"></app-spinner>
+    <ng-template #form>
+      <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text"
+                 class="form-control"
+                 name="title"
+                 id="title"
+                 formControlName="title">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea name="description"
+                    id="description"
+                    rows="3"
+                    class="form-control"
+                    formControlName="description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="releasedDate">Released Date</label>
+          <input type="date"
+                 name="releasedDate"
+                 id="releasedDate"
+                 class="form-control"
+                 formControlName="releasedDate">
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </ng-template>
+  </div>
+</div>

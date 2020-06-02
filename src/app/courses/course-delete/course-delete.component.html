@@ -1,0 +1,12 @@
+<div class="row text-center">
+  <app-spinner *ngIf="isLoading; else content"></app-spinner>
+  <ng-template #content>
+    <div class="col-xs-12">
+      <h3>Do you want to delete course "{{course.title}}" from {{course.releasedDate | date:'mediumDate'}}</h3>
+    </div>
+    <div class="btn-group" style="margin-top: 20px">
+      <button class="btn btn-danger" (click)="onConfirm()">Delete</button>
+      <button class="btn btn-default" (click)="onCancel()">Cancel</button>
+    </div>
+  </ng-template>
+</div>
