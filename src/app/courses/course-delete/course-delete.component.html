@@ -1,6 +1,7 @@
 <div class="row text-center">
   <app-spinner *ngIf="isLoading; else content"></app-spinner>
   <ng-template #content>
+    <app-error [error]="error" ]></app-error>
     <div class="col-xs-12">
       <h3>Do you want to delete course "{{course.title}}" from {{course.releasedDate | date:'mediumDate'}}</h3>
     </div>

@@ -12,6 +12,7 @@ import {ProfileComponent} from "./users/profile/profile.component";
 import {AdminGuardService} from "./authentication/admin-guard.service";
 import {UserListComponent} from "./users/user-list/user-list.component";
 import {CourseFavouritesComponent} from "./courses/course-favourites/course-favourites.component";
+import {NotFoundComponent} from "./shared/not-found/not-found.component";
 
 
 const routes: Routes = [
@@ -29,7 +30,9 @@ const routes: Routes = [
   },
   {path: 'favourites', component: CourseFavouritesComponent},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
-  {path: 'users', component: UserListComponent, canActivate: [AuthGuardService, AdminGuardService]}
+  {path: 'users', component: UserListComponent, canActivate: [AuthGuardService, AdminGuardService]},
+  {path: '404', component: NotFoundComponent},
+  {path: '**', redirectTo: '404'}
 ];
 
 @NgModule({

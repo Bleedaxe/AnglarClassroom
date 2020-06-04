@@ -24,6 +24,8 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { CourseFavouritesComponent } from './courses/course-favourites/course-favourites.component';
 import {CourseRatingPipe} from "./shared/course-rating.pipe";
 import { CourseRatingComponent } from './courses/course-rating/course-rating.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
+import { ErrorComponent } from './shared/error/error.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { CourseRatingComponent } from './courses/course-rating/course-rating.com
     UserListComponent,
     CourseFavouritesComponent,
     CourseRatingPipe,
-    CourseRatingComponent
+    CourseRatingComponent,
+    NotFoundComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

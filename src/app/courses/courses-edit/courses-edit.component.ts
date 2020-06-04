@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CourseService} from "../course.service";
 import {Course} from "../course.model";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-courses-edit',
@@ -17,6 +18,7 @@ export class CoursesEditComponent implements OnInit {
   editMode = false;
   courseForm: FormGroup;
   editCourse: Course;
+  error: string;
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -37,26 +39,38 @@ export class CoursesEditComponent implements OnInit {
 
   //TODO: Add error handling
   onSubmit() {
+    if (!this.courseForm.valid) {
+      this.error = "Form is invalid!"
+      return;
+    }
     this.isLoading = true;
     const submit = this.editMode
       ? this.courseService.updateCourse({...this.courseForm.value, rating: this.editCourse.rating, id: this.id})
       : this.courseService.addCourse(this.courseForm.value);
 
-    submit.subscribe(response => {
-      console.log(response);
-      this.isLoading = false;
-      this.router.navigate(["../"], {relativeTo: this.route});
-    })
+    submit
+      .pipe(take(1))
+      .subscribe(response => {
+        console.log(response);
+        this.isLoading = false;
+        this.router.navigate(["../"], {relativeTo: this.route});
+      })
   }
 
   private initForm() {
     this.isLoading = true;
     if (this.editMode) {
-      this.courseService.getCourse(this.id).subscribe(course => {
-        this.editCourse = course;
-        this.loadForm(course.title, course.description, course.releasedDate);
-        this.isLoading = false;
-      });
+      this.courseService.getCourse(this.id)
+        .pipe(take(1))
+        .subscribe(course => {
+          if (!course) {
+            this.router.navigate(['/', '404']);
+            return;
+          }
+          this.editCourse = course;
+          this.loadForm(course.title, course.description, course.releasedDate);
+          this.isLoading = false;
+        });
     } else {
       this.loadForm("", "", new Date());
       this.isLoading = false;

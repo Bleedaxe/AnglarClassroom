@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
+    <app-error [error]="error"></app-error>
     Rating: {{course.rating | courseRating}}
     <br>
     <form [formGroup]="courseRatingForm" (ngSubmit)="submitCourseRating()">
@@ -12,7 +13,11 @@
           class="form-control"
           formControlName="rating">
       </div>
-      <button class="btn btn-success col-md-4" style="margin-top: 10px" type="submit">Add Rating</button>
+      <button class="btn btn-success col-md-4"
+              style="margin-top: 10px"
+              type="submit"
+              [disabled]="courseRatingForm.invalid && courseRatingForm.touched">Add Rating
+      </button>
     </form>
   </div>
 </div>

@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   userInfoForm: FormGroup;
   isLoading: boolean;
   changePasswordForm: FormGroup;
+  profileError: string;
+  changePasswordError: string;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -41,18 +43,23 @@ export class ProfileComponent implements OnInit {
 
   onUserInfoSubmit() {
     if (!this.userInfoForm.valid) {
-      alert('Invalid form')
+      this.profileError = "Form is invalid";
       return;
     }
     this.isLoading = true;
     this.userInfo.name = this.userInfoForm.value.name;
     this.userInfo.familyName = this.userInfoForm.value.familyName;
 
-    this.userService.updateUser(this.userInfo).subscribe(() => {
-      this.userInfoService.authUser = this.userInfo;
-      this.isLoading = false;
-      this.router.navigate(['../'], {relativeTo: this.route})
-    })
+    this.userService.updateUser(this.userInfo)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.userInfoService.authUser = this.userInfo;
+        this.isLoading = false;
+        this.router.navigate(['../'], {relativeTo: this.route})
+      }, error => {
+        this.profileError = error.message || "Something went wrong"
+        this.isLoading = false;
+      })
   }
 
   initForm() {
@@ -66,16 +73,28 @@ export class ProfileComponent implements OnInit {
     })
 
     this.changePasswordForm = new FormGroup({
-      'password': new FormControl('', Validators.required)
+      'password': new FormControl('', [
+        Validators.required,
+        Validators.min(6)
+      ])
     });
   }
 
   onChangePasswordSubmit() {
+    if (this.changePasswordForm.invalid) {
+      this.changePasswordError = "New password is invalid";
+      return
+    }
     this.isLoading = true;
     this.authService.changePassword(this.changePasswordForm.value.password)
       .subscribe(() => {
         this.isLoading = false;
         this.router.navigate(["../"], {relativeTo: this.route});
+      }, error => {
+        this.changePasswordError = error.error && error.error && error.error.error.message
+          ? error.error.error.message
+          : "Something went wrong";
+        this.isLoading = false;
       });
   }
 }

@@ -3,8 +3,9 @@
     <h1>Profile</h1>
     <app-spinner *ngIf="isLoading; else content"></app-spinner>
     <ng-template #content>
+      <app-error [error]=" profileError"></app-error>
       <form [formGroup]="userInfoForm" (ngSubmit)="onUserInfoSubmit()">
-      <h3>Change user info</h3>
+        <h3>Change user info</h3>
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email"
@@ -33,9 +34,12 @@
                  formControlName="familyName">
         </div>
 
-        <button class="btn btn-success" type="submit">Save</button>
+        <button class="btn btn-success"
+                type="submit"
+                [disabled]="userInfoForm.invalid && userInfoForm.touched">Save</button>
       </form>
 
+      <app-error [error]=" changePasswordError"></app-error>
       <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePasswordSubmit()">
         <h3>Change password</h3>
         <div class="form-group">
@@ -47,10 +51,11 @@
                  formControlName="password">
         </div>
 
-        <button class="btn btn-success" type="submit">Save</button>
+        <button class="btn btn-success"
+                type="submit"
+                [disabled]="changePasswordForm.invalid && changePasswordForm.touched">Save
+        </button>
       </form>
-      <button class="btn btn-default"
-              type="button" routerLink="../">Cancel</button>
     </ng-template>
   </div>
 </div>

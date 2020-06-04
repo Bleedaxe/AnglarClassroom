@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Course} from "../course.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CourseService} from "../course.service";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-course-delete',
@@ -12,18 +13,28 @@ export class CourseDeleteComponent implements OnInit {
 
   isLoading: boolean;
   course: Course;
+  error: string;
 
   constructor(private courseService: CourseService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.isLoading = true;
-      this.courseService.getCourse(params['id']).subscribe(course => {
-        this.course = course;
-        this.isLoading = false;
-      });
+      this.courseService.getCourse(params['id'])
+        .pipe(take(1))
+        .subscribe(course => {
+          if (!course) {
+            this.router.navigate(['/', '404']);
+          }
+          this.course = course;
+          this.isLoading = false;
+        }, error => {
+          console.log(error);
+          this.error = error.message;
+        });
     })
   }
 

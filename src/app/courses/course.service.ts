@@ -19,6 +19,9 @@ export class CourseService {
       ApplicationProperteis.getUrl(`course/${id}`)
     ).pipe(
       map(course => {
+        if (!course) {
+          return course;
+        }
         const newCourse = {...course, id: id }
         if (currentUser) {
           newCourse.currentUserRating = this.getCourseRatingForCurrentUser(course, currentUser);

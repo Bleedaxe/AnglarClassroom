@@ -18,9 +18,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   isLoading = false;
   course: Course;
-  unsubscribe = new Subject<void>();
   isAdmin: boolean = false;
   currentUser: UserInfo;
+  error: string
+
+  private unsubscribe = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -43,6 +45,12 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
         this.currentUser = this.userInfoService.authUser;
         this.loadCourse(this.currentUser);
         this.isAdmin = this.currentUser.isInRole(ApplicationProperteis.ADMIN_ROLE_NAME);
+      })
+
+    this.courseService.coursesUpdate
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.loadCourse(this.currentUser);
       })
   }
 
@@ -82,9 +90,14 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       this.courseService.getCourse(params['id'], currentUser)
         .pipe(take(1))
         .subscribe(course => {
-          console.log(course);
+          if (!course) {
+            this.router.navigate(['/404']);
+            return;
+          }
           this.course = course
           this.isLoading = false;
+        }, error => {
+          this.error = error;
         })
     })
   }

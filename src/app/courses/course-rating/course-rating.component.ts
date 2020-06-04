@@ -3,6 +3,8 @@ import {Course} from "../course.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserInfoService} from "../../authentication/user-info.service";
 import {CourseService} from "../course.service";
+import {Subject} from "rxjs";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-course-rating',
@@ -13,6 +15,7 @@ export class CourseRatingComponent implements OnInit {
 
   @Input() course: Course;
   courseRatingForm: FormGroup;
+  error: string;
 
   constructor(private userInfoService: UserInfoService,
               private courseService: CourseService) {
@@ -35,8 +38,8 @@ export class CourseRatingComponent implements OnInit {
 
   submitCourseRating() {
     if (!this.courseRatingForm.valid) {
-      //TODO: Load message
-      return
+      this.error = "Rating must be number between 1 and 5"
+      return;
     }
 
     const currentUserId = this.userInfoService.authUser.id;
@@ -47,8 +50,9 @@ export class CourseRatingComponent implements OnInit {
     }
     this.course.rating[currentUserId] = rating;
     this.courseService.updateCourse(this.course)
+      .pipe(take(1))
       .subscribe(() => {}, error => {
-        console.log(error);
+        this.courseService.coursesUpdate.next();
       });
   }
 }
